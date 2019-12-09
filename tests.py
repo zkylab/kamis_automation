@@ -1,34 +1,7 @@
-# -*- coding: utf-8 -*-
 from urllib.request import urlopen
 
 import requests
 from bs4 import BeautifulSoup
-from requests import request
-
-# Common configs
-requests.packages.urllib3.disable_warnings()
-
-all_own_links = []
-
-
-# PURPOSE : get all links and images
-def get_all_links(url):
-    all = {}
-    with urlopen(url) as response:
-        html = response.read()
-    bsObj = BeautifulSoup(html, 'lxml')
-    links = [link.attrs['href'] if not link.attrs['href'].startswith("#") else None for link in bsObj.findAll('a')]
-    links = [link for link in links if link is not None]
-    final_links = list(map(lambda link: url + link if not link.lower().startswith(("http", "https")) else link, links))
-    own_links = list(map(lambda link: link if link.startswith(url) else None, final_links))
-    # TODO: sometimes src is not enough to cover all images, modify it
-    images = [link.get('src').replace("//", "http://") for link in bsObj.findAll('img')]
-    all["images"] = images
-    all['final_links'] = final_links
-    all_own_links.extend(own_links)
-    for own_link in own_links:
-        get_all_links(own_link)
-    return all
 
 
 # TEST, check images size
@@ -67,18 +40,12 @@ def check_response_time(links, response_time_max):
     for link in links:
         timeout = False
         try:
-            response = requests.get(link, verify=False, timeout=5)
+            response = requests.get(link, verify=False, timeout=response_time_max)
         except:
-            elapsed_time = 9999
+            elapsed_time = 99999999
             timeout = True
         if timeout is False:
             elapsed_time = response.elapsed.total_seconds()
         if (elapsed_time > response_time_max):
             exceed_response_time[link] = elapsed_time
     return exceed_response_time
-
-
-all = get_all_links('https://www.turkiye.gov.tr')
-exceed_images = check_image_size(all['images'], 4500)
-exceed_response_time = check_response_time(all['images'], 1)
-print(exceed_response_time)
