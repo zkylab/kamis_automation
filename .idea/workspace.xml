@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c30448a1-f951-4254-ab9b-255af15d585f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,8 +113,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.infra" />
       <item itemvalue="Python.Main" />
+      <item itemvalue="Python.infra" />
     </list>
   </component>
   <component name="ServiceViewManager">
@@ -226,9 +225,10 @@
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
     <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1575891685870" />
-    <state x="661" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1575887391153">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="-1259" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1576919318933">
+      <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
+    <state x="-1259" y="342" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1576919318933" />
     <state x="661" y="342" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575887391153" />
     <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1575889740014">
       <screen x="-1920" y="0" width="1920" height="1040" />
