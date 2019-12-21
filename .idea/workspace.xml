@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c30448a1-f951-4254-ab9b-255af15d585f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/master" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/KAMIS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/KAMIS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infra.py" beforeDir="false" afterPath="$PROJECT_DIR$/infra.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +170,10 @@
     </state>
     <state x="-1506" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1575896098941" />
     <state x="414" y="173" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1575887713745" />
+    <state x="-1194" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1576919868812">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1194" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1576919868812" />
     <state x="-1083" y="221" width="792" height="597" key="#xdebugger.evaluate" timestamp="1575891947065">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
@@ -240,12 +251,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/infra.py</url>
-          <line>66</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/infra.py</url>
-          <line>27</line>
+          <line>29</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>

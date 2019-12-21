@@ -49,3 +49,12 @@ def check_response_time(links, response_time_max):
         if (elapsed_time > response_time_max):
             exceed_response_time[link] = elapsed_time
     return exceed_response_time
+
+
+def check_link_text_length(link_texts, max_length):
+    exceed_link_texts = {}
+    for text in link_texts:
+        if len(text) > max_length:
+            # TODO: store link in dict, not len of text
+            exceed_link_texts['link-text'] = len(text)
+    return exceed_link_texts
