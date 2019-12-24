@@ -9,3 +9,4 @@ print(tests.check_breadcrumbs_title(liste,properties_list.get('breadcrumb_class'
 #print(tests.check_link_len(all_urls['final_links'], 15))
 #Modify code to get all links texts.
 #print(tests.check_link_text_length(infra.all['link-text'], 10))
+print("test")
