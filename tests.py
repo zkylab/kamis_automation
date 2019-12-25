@@ -1,5 +1,5 @@
 from urllib.request import urlopen
-
+import string
 import requests
 from bs4 import BeautifulSoup
 
@@ -58,3 +58,99 @@ def check_link_text_length(link_texts, max_length):
             # TODO: store link in dict, not len of text
             exceed_link_texts['link-text'] = len(text)
     return exceed_link_texts
+
+
+# Her sayfada bir ana sayfa linki olup olmadığını kontrol eden test
+def check_anasayfa_link(links):
+    for link in links:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        allatags = page_soup.find_all('a')
+        for tags in allatags:
+            if "Ana Sayfa" or "anasayfa" or "Ana Sayfa" or "Anasayfa" in tags:
+                print("Ana Sayfa bağlantısı var.")
+                return True
+            else:
+                print("Ana Sayfa bağlantısı yok.")
+                return False
+
+
+baglaclar = ["ama", "fakat", "lâkin", "ancak", "yalnız", "oysa", "oysaki", "hâlbuki",
+             "ve", "ile", "ki", "de", "çünkü", "zira",
+             "madem", "mademki",
+             "veyahut", "yahut", "veya", "ya da",
+             "şayet", "eğer", "ise",
+             "öyleyse", "o halde",
+             "kısacası", "demek ki", "nitekim",
+             "yoksa", "anlaşılan",
+             "hatta", "üstelik", "ayrıca", "hem", "hem de",
+             "yine", "gene",
+             "meğer"
+             ]
+
+
+# Başlıkta özel karakter ve bağlaç olup olmadığını kontrol eden test
+def check_title_for_special_characters_and_baglaclar(url):
+    page = urlopen(url)
+    page_soup = BeautifulSoup(page, "lxml")
+    if has_special_char(page_soup.title.string):
+        print("Sayfa başlığında özel karakter bulunmakta.")
+    else:
+        print("Sayfa başlığında özel karakter bulunmamakta.")
+    for baglac in baglaclar:
+        if baglac in page_soup.title.string.lower():
+            baglac_var = True
+            break
+        else:
+            baglac_var = False
+    if baglac_var:
+        print("Başlıkta bağlaç var.")
+    else:
+        print("Başlıkta bağlaç yok.")
+
+
+def has_special_char(text: str) -> bool:
+    if set(text).difference(string.ascii_letters + string.digits):
+        return True
+    else:
+        return False
+
+
+"""
+def has_special_char(text: str) -> bool:
+    return any(c for c in text if not c.isalnum() and not c.isspace())
+"""
+
+
+# Ana sayfada çok fazla sayıda bağlantıya yer verilmesinin,
+# ana sayfa görünümünü karmaşık hale getireceği ve
+# internet sitesinin kullanılabilirliğini azaltacağı göz önünde bulundurulmalıdır.
+def check_mainpage_for_many_links(url, links_threshold):
+    page = urlopen(url)
+    page_soup = BeautifulSoup(page, "lxml")
+    allatags = page_soup.find_all('a')
+    if len(allatags) >= links_threshold:
+        print("Ana sayfada çok fazla sayıda bağlantı var. Link sayısı:" + str(len(allatags)))
+    else:
+        print("Ana sayfada çok fazla sayıda bağlantı yok. Link sayısı:" + str(len(allatags)))
+
+
+# Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilebilmelidir
+# ancak bu yöntem ana sayfaya gitmek için tek yol olarak görülmemelidir. -> Barış
+
+def check_pages_for_logolink_to_mainpage(all_urls):
+    for url in all_urls:
+        page = urlopen(url)
+        page_soup = BeautifulSoup(page, "lxml")
+        logos = page_soup.find_all(attrs={'id': 'logo', 'name': 'logo', 'class': 'logo'})
+        print(logos)
+        """for links in page_soup.find_all('a'):
+            if len(links.findChildren(attrs={'id': 'logo', 'name': 'logo', 'class': 'logo'})) > 0:
+                result = True
+            else:
+                result = False
+
+    if result:
+        print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilebiliyor")
+    else:
+        print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilemiyor")"""
