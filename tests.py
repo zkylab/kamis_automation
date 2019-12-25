@@ -1,8 +1,11 @@
+import mimetypes
 from urllib.request import urlopen
 
 import requests
+from PIL.ImageFile import ImageFile
 from bs4 import BeautifulSoup
-
+import urllib
+from mimetypes import MimeTypes
 
 # TEST, check images size
 def check_image_size(images, image_size_max):
@@ -59,6 +62,7 @@ def check_link_text_length(link_texts, max_length):
             exceed_link_texts['link-text'] = len(text)
     return exceed_link_texts
 
+#Alt sayfalarda, zamandan tasarruf ve hızlı erişim imkânı sunan ekmek kırıntısı (breadcrumbs) yapısı kullanılmalıdır.
 def check_breadcrumbs(liste, bread_crumb_class_name):
     for link in liste:
         page = urlopen(link)
@@ -72,6 +76,7 @@ def check_breadcrumbs(liste, bread_crumb_class_name):
             print("BreadCrumb yok")
     return bread_crumb_element
 
+#Site içindeki tüm sayfalarda aynı başlıkların kullanılmasından kaçınılmalı, her sayfaya özel ve sayfa içeriğini tanımlayıcı bir başlık seçilmelidir.
 def check_title_repeat(liste):
     titles_on_the_site =[]
     repeated_titles=["Tekrar eden başlıklar : "]
@@ -92,7 +97,7 @@ def check_title_repeat(liste):
 
     return repeated_titles
 
-
+#Ekmek kırıntısı yapısı içindeki hiyerarşik yolun en sonundaki bölüm kullanıcıların bulunduğu sayfayı göstermelidir.
 def check_breadcrumbs_title(liste, bread_crumb_class_name):
     for link in liste:
         page = urlopen(link)
@@ -111,7 +116,7 @@ def check_breadcrumbs_title(liste, bread_crumb_class_name):
                 print("Sayfa Başlığı : " + page_soup.title.text)
                 print("Ekmek kırıntısı sonu : " + list_items.text)
 
-
+#Hiyerarşik yolun en sonundaki bölümün tıklanabilir olmaması gerekmektedir.
 def check_breadcrumbs_link(liste,bread_crumb_class_name):
     for link in liste:
         page = urlopen(link)
@@ -127,3 +132,17 @@ def check_breadcrumbs_link(liste,bread_crumb_class_name):
                 print("Breadcrumb ın sonunda link var : !! "+list_items.text)
             else:
                 print("Breadcrumbda sonda link yok yalnızca : "+list_items.text)
+def collect_pdfs(liste):
+    pdfs =[]
+    for link in liste:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        for links in page_soup.findAll('a'):
+            type = mimetypes.guess_type(links.get("href"))
+            print(type[0])
+            text = type[0]
+            if text is not "None":
+                print(type)
+
+    return pdfs
+
