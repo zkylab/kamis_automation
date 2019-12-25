@@ -10,5 +10,6 @@ liste=["http://www.turkishtestingboard.org/istqb-sinavlar-hakkinda-bilgi/"]
 #print(tests.check_link_len(all_urls['final_links'], 15))
 #Modify code to get all links texts.
 #print(tests.check_link_text_length(infra.all['link-text'], 10))
-print(tests.collect_pdfs(liste))
+#print(tests.collect_pdfs(liste))
+print(tests.check_link_new_tab(liste))
 print("test")

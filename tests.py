@@ -146,3 +146,23 @@ def collect_pdfs(liste):
 
     return pdfs
 
+def check_link_new_tab(liste):
+    links_open_in_new_tab =["Yeni Sekmede Açılan Dosyalar :"]
+    links_not_open_in_new_tab =["text/html Olmamasına Rağmen Yeni Sekmede Açılmayan Dosyalar :"]
+    for link in liste:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        for links in page_soup.findAll('a'):
+
+            if links.get('href').startswith("http:"):
+                test_links = urlopen(links.get('href'))
+                content_type_of_tested = test_links.headers['Content-Type']
+                print("content : " + content_type_of_tested + "  :" + links.get('href'))
+                if not content_type_of_tested.startswith("text/html"):
+                    tag_test_for_new_tab = links.get('target')
+                    print(tag_test_for_new_tab)
+                    if tag_test_for_new_tab == "_blank":
+                        links_open_in_new_tab.append(links.get('href'))
+                    else:
+                        links_not_open_in_new_tab.append(links.get('href'))
+    return links_open_in_new_tab,links_not_open_in_new_tab
