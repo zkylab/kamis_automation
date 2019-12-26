@@ -2,7 +2,7 @@ from urllib.request import urlopen
 import string
 import requests
 from bs4 import BeautifulSoup
-
+import re
 
 # TEST, check images size
 def check_image_size(images, image_size_max):
@@ -142,8 +142,10 @@ def check_pages_for_logolink_to_mainpage(all_urls):
     for url in all_urls:
         page = urlopen(url)
         page_soup = BeautifulSoup(page, "lxml")
-        logos = page_soup.find_all(attrs={'id': 'logo', 'name': 'logo', 'class': 'logo'})
-        print(logos)
+        links = page_soup.find_all('a')
+        for link in links:
+            lgs = link.find_all('img', re.compile("logo"))
+            print(lgs)
         """for links in page_soup.find_all('a'):
             if len(links.findChildren(attrs={'id': 'logo', 'name': 'logo', 'class': 'logo'})) > 0:
                 result = True
