@@ -2,6 +2,7 @@ import mimetypes
 from urllib.request import urlopen
 
 import requests
+import json
 from PIL.ImageFile import ImageFile
 from bs4 import BeautifulSoup
 import urllib
@@ -79,28 +80,32 @@ def check_breadcrumbs(liste, bread_crumb_class_name):
 #Site içindeki tüm sayfalarda aynı başlıkların kullanılmasından kaçınılmalı, her sayfaya özel ve sayfa içeriğini tanımlayıcı bir başlık seçilmelidir.
 def check_title_repeat(liste):
     titles_on_the_site =[]
-    repeated_titles=["Tekrar eden başlıklar : "]
+    repeated_titles=["Tekrar eden başlıklar" ":"]
+    repeated_titles_dict = {'Test Başlığı' : 'Repeated Titles'}
     for link in liste:
         count=0
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
-        #print(page_soup.title.text)
         titles_on_the_site.append(page_soup.title.text)
         for title in titles_on_the_site:
             if title == page_soup.title.text:
                 count = count+1
             if(count>1):
                 repeated_titles.append(title)
+                key = title
+                value = "Tekrar Eden Başlık"
+                repeated_titles_dict[key]=value
     if(count<=1):
         repeated_titles.append("Yoktur.")
-
-
-    return repeated_titles
+    json_repeat_title=json.dumps(repeated_titles_dict)
+    return json_repeat_title
 
 #Ekmek kırıntısı yapısı içindeki hiyerarşik yolun en sonundaki bölüm kullanıcıların bulunduğu sayfayı göstermelidir.
 def check_breadcrumbs_title(liste, bread_crumb_class_name):
     title_breadcrumb_same =["Başlıkta ekmek kırıntısının son öğesi olan sayfalar : "]
+    title_breadcrumb_same_dict={'Test Başlığı ':'Başlıkta ekmek kırıntısının son öğesi olan sayfalar'}
     title_breadcrumb_diff =["Başlıkta ekmek kırıntısının son öğesi olmayan sayfalar : "]
+    title_breadcrumb_diff_dict={'Test Başlığı ':'Başlıkta ekmek kırıntısının son öğesi olmayan sayfalar'}
     for link in liste:
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
@@ -108,10 +113,18 @@ def check_breadcrumbs_title(liste, bread_crumb_class_name):
             for list_items in bc_list.findAll('li'):
                 list_link_items = bc_list.findAll('a')
             if list_items.text in page_soup.title.text:
+                key = page_soup.title.text
+                value = "Ekmek kırıntısının sonu başlık içinde yer almıyor"
+                title_breadcrumb_same_dict[key]=value
                 title_breadcrumb_same.append(page_soup.title)
             else:
+                key = page_soup.title.text
+                value = "Ekmek kırıntısının sonu başlık içinde yer alıyor"
+                title_breadcrumb_diff_dict[key] = value
                 title_breadcrumb_diff.append(page_soup.title)
-    return  title_breadcrumb_diff,title_breadcrumb_same
+    json_title_breadcrumb_same = json.dumps(title_breadcrumb_same_dict)
+    json_title_breadcrumb_diff = json.dumps(title_breadcrumb_diff_dict)
+    return  json_title_breadcrumb_diff,json_title_breadcrumb_same
 
 #Hiyerarşik yolun en sonundaki bölümün tıklanabilir olmaması gerekmektedir.
 def check_breadcrumbs_link(liste,bread_crumb_class_name):
