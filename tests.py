@@ -64,17 +64,17 @@ def check_link_text_length(link_texts, max_length):
 
 #Alt sayfalarda, zamandan tasarruf ve hızlı erişim imkânı sunan ekmek kırıntısı (breadcrumbs) yapısı kullanılmalıdır.
 def check_breadcrumbs(liste, bread_crumb_class_name):
+    page_with_breadcrumb =["Ekmek kırıntısı olan sayfalar : "]
+    page_without_breadcrumb =["Ekmek kırıntısı olmayan sayfalar : "]
     for link in liste:
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
         bread_crumb_element = page_soup.find("", {"class": bread_crumb_class_name})
         if bread_crumb_element is not None:
-            print(page_soup.title)
-            print("BreadCrumb var")
+            page_with_breadcrumb.append(page_soup.title)
         else:
-            print(page_soup.title)
-            print("BreadCrumb yok")
-    return bread_crumb_element
+            page_without_breadcrumb.append(page_soup.title)
+    return page_without_breadcrumb,page_with_breadcrumb
 
 #Site içindeki tüm sayfalarda aynı başlıkların kullanılmasından kaçınılmalı, her sayfaya özel ve sayfa içeriğini tanımlayıcı bir başlık seçilmelidir.
 def check_title_repeat(liste):
@@ -99,53 +99,39 @@ def check_title_repeat(liste):
 
 #Ekmek kırıntısı yapısı içindeki hiyerarşik yolun en sonundaki bölüm kullanıcıların bulunduğu sayfayı göstermelidir.
 def check_breadcrumbs_title(liste, bread_crumb_class_name):
+    title_breadcrumb_same =["Başlıkta ekmek kırıntısının son öğesi olan sayfalar : "]
+    title_breadcrumb_diff =["Başlıkta ekmek kırıntısının son öğesi olmayan sayfalar : "]
     for link in liste:
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
-        print("*****************************************************")
-        print("EKMEK KIRINTISI VE BAŞLIK İLİŞKİSİ Kontrol edilen sayfa başlığı : " + page_soup.title.text)
         for bc_list in page_soup.findAll('', class_=bread_crumb_class_name):
             for list_items in bc_list.findAll('li'):
                 list_link_items = bc_list.findAll('a')
             if list_items.text in page_soup.title.text:
-                print(page_soup.title)
-                print("Ekmek kırıntısı sonundaki bölüm sayfa başlığı ile uyumlu")
+                title_breadcrumb_same.append(page_soup.title)
             else:
-                print(page_soup.title)
-                print("Ekmek kırıntısı sonundaki bölüm sayfa başlığı ile uyumlu DEĞİL")
-                print("Sayfa Başlığı : " + page_soup.title.text)
-                print("Ekmek kırıntısı sonu : " + list_items.text)
+                title_breadcrumb_diff.append(page_soup.title)
+    return  title_breadcrumb_diff,title_breadcrumb_same
 
 #Hiyerarşik yolun en sonundaki bölümün tıklanabilir olmaması gerekmektedir.
 def check_breadcrumbs_link(liste,bread_crumb_class_name):
+    last_breadcrumb_with_link =["Ekmek kırıntısının sonunda link olan sayfalar : "]
+    last_breadcrumb_without_link = ["Ekmek kırıntısının sonunda link olmayan sayfalar : "]
     for link in liste:
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
-        print("*****************************************************")
-        print("EKMEK KIRINTISI BAĞLANTI DURUMU Kontrol edilen sayfa başlığı : "+page_soup.title.text)
         for bc_list in page_soup.findAll('', class_=bread_crumb_class_name):
             for list_link_items in bc_list.findAll('a'):
                 print("")
             for list_items in bc_list.findAll('li'):
                 list_link_items = bc_list.findAll('a')
             if list_link_items is list_items:
-                print("Breadcrumb ın sonunda link var : !! "+list_items.text)
+                last_breadcrumb_with_link.append(page_soup.title)
             else:
-                print("Breadcrumbda sonda link yok yalnızca : "+list_items.text)
-def collect_pdfs(liste):
-    pdfs =[]
-    for link in liste:
-        page = urlopen(link)
-        page_soup = BeautifulSoup(page, "lxml")
-        for links in page_soup.findAll('a'):
-            type = mimetypes.guess_type(links.get("href"))
-            print(type[0])
-            text = type[0]
-            if text is not "None":
-                print(type)
+                last_breadcrumb_without_link.append(page_soup.title)
+    return last_breadcrumb_with_link,last_breadcrumb_without_link
 
-    return pdfs
-
+#Yeni Sekmede açılan - açılmayan linkler
 def check_link_new_tab(liste):
     links_open_in_new_tab =["Yeni Sekmede Açılan Dosyalar :"]
     links_not_open_in_new_tab =["text/html Olmamasına Rağmen Yeni Sekmede Açılmayan Dosyalar :"]
@@ -153,16 +139,14 @@ def check_link_new_tab(liste):
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
         for links in page_soup.findAll('a'):
-
-            if links.get('href').startswith("http:"):
-                test_links = urlopen(links.get('href'))
-                content_type_of_tested = test_links.headers['Content-Type']
-                print("content : " + content_type_of_tested + "  :" + links.get('href'))
-                if not content_type_of_tested.startswith("text/html"):
-                    tag_test_for_new_tab = links.get('target')
-                    print(tag_test_for_new_tab)
-                    if tag_test_for_new_tab == "_blank":
-                        links_open_in_new_tab.append(links.get('href'))
-                    else:
-                        links_not_open_in_new_tab.append(links.get('href'))
+            if links.get('href') is not None:
+                if links.get('href').startswith("http:"):
+                    test_links = urlopen(links.get('href'))
+                    content_type_of_tested = test_links.headers['Content-Type']
+                    if not content_type_of_tested.startswith("text/html"):
+                        tag_test_for_new_tab = links.get('target')
+                        if tag_test_for_new_tab == "_blank":
+                            links_open_in_new_tab.append(links.get('href'))
+                        else:
+                            links_not_open_in_new_tab.append(links.get('href'))
     return links_open_in_new_tab,links_not_open_in_new_tab
