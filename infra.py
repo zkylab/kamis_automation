@@ -11,8 +11,9 @@ pattern = re.compile(mail_tel_regex)
 link_text = {}
 
 
+# Own Link length is hardly configured to provide testing purposes, since scrapping all pages is time consuming.
 def recursive_link_collector(url):
-    if len(recursively_data['own-links']) > 5:
+    if len(recursively_data['own-links']) > 60:
         return 1
     session = HTMLSession()
     web_manager = session.get(url)
