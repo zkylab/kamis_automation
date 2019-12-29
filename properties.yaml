@@ -1,1 +1,6 @@
 breadcrumb_class : breadcrumb
+image_size_max : 12
+link_size_max : 5
+title_size_max : 5
+response_time_max : 2
+max_length : 6

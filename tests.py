@@ -3,16 +3,17 @@ from urllib.request import urlopen
 
 import requests
 import json
-from PIL.ImageFile import ImageFile
+from string import printable
 from bs4 import BeautifulSoup
-import urllib
-from mimetypes import MimeTypes
 
 # TEST, check images size
 def check_image_size(images, image_size_max):
     exceed_images = {}
     for image_link in images:
-        img = urlopen(image_link)
+        try:
+            img = urlopen(image_link)
+        except:
+            continue
         if int(img.headers['content-length']) > image_size_max:
             exceed_images[image_link] = img.headers['content-length']
     return exceed_images
@@ -22,20 +23,17 @@ def check_image_size(images, image_size_max):
 def check_link_len(links, link_size_max):
     long_links = {}
     for link in links:
-        if (len(link) > link_size_max):
+        if len(link) > link_size_max:
             long_links[link] = len(link)
     return long_links
 
 
 # TEST, check title length
-def check_title_len(links, title_size_max, ):
+def check_title_len(titles, title_size_max):
     long_titles = {}
-    for link in links:
-        page = urlopen(link)
-        page_soup = BeautifulSoup(page, "lxml")
-        if page_soup.title is not None:
-            if len(page_soup.title.string) > title_size_max:
-                long_titles[link] = page_soup.title.string
+    for title in titles.values():
+        if len(title) > title_size_max:
+            long_titles[title] = len(title)
     return long_titles
 
 
@@ -50,18 +48,25 @@ def check_response_time(links, response_time_max):
             timeout = True
         if timeout is False:
             elapsed_time = response.elapsed.total_seconds()
-        if (elapsed_time > response_time_max):
+        if elapsed_time > response_time_max:
             exceed_response_time[link] = elapsed_time
     return exceed_response_time
 
 
 def check_link_text_length(link_texts, max_length):
     exceed_link_texts = {}
-    for text in link_texts:
-        if len(text) > max_length:
-            # TODO: store link in dict, not len of text
-            exceed_link_texts['link-text'] = len(text)
+    for link_text in link_texts.values():
+        if len(link_text) > max_length:
+            exceed_link_texts[link_text] = len(link_text)
     return exceed_link_texts
+
+
+def check_special_character(link_texts):
+    special_character_texts = []
+    for link_text in link_texts.values():
+        if set(link_texts).difference(printable):
+            special_character_texts.append(link_text)
+    return special_character_texts
 
 #Alt sayfalarda, zamandan tasarruf ve hızlı erişim imkânı sunan ekmek kırıntısı (breadcrumbs) yapısı kullanılmalıdır.
 def check_breadcrumbs(liste, bread_crumb_class_name):
@@ -82,8 +87,9 @@ def check_title_repeat(liste):
     titles_on_the_site =[]
     repeated_titles=["Tekrar eden başlıklar" ":"]
     repeated_titles_dict = {'Test Başlığı' : 'Repeated Titles'}
+    count = 0
     for link in liste:
-        count=0
+        count = 0
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
         titles_on_the_site.append(page_soup.title.text)
@@ -97,8 +103,7 @@ def check_title_repeat(liste):
                 repeated_titles_dict[key]=value
     if(count<=1):
         repeated_titles.append("Yoktur.")
-    json_repeat_title=json.dumps(repeated_titles_dict)
-    return json_repeat_title
+    return repeated_titles
 
 #Ekmek kırıntısı yapısı içindeki hiyerarşik yolun en sonundaki bölüm kullanıcıların bulunduğu sayfayı göstermelidir.
 def check_breadcrumbs_title(liste, bread_crumb_class_name):
@@ -122,9 +127,7 @@ def check_breadcrumbs_title(liste, bread_crumb_class_name):
                 value = "Ekmek kırıntısının sonu başlık içinde yer alıyor"
                 title_breadcrumb_diff_dict[key] = value
                 title_breadcrumb_diff.append(page_soup.title)
-    json_title_breadcrumb_same = json.dumps(title_breadcrumb_same_dict)
-    json_title_breadcrumb_diff = json.dumps(title_breadcrumb_diff_dict)
-    return  json_title_breadcrumb_diff,json_title_breadcrumb_same
+    return  title_breadcrumb_diff,title_breadcrumb_same
 
 #Hiyerarşik yolun en sonundaki bölümün tıklanabilir olmaması gerekmektedir.
 def check_breadcrumbs_link(liste,bread_crumb_class_name):
@@ -134,8 +137,6 @@ def check_breadcrumbs_link(liste,bread_crumb_class_name):
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
         for bc_list in page_soup.findAll('', class_=bread_crumb_class_name):
-            for list_link_items in bc_list.findAll('a'):
-                print("")
             for list_items in bc_list.findAll('li'):
                 list_link_items = bc_list.findAll('a')
             if list_link_items is list_items:
