@@ -1,10 +1,9 @@
 import infra
 import tests
 import yaml
-with open(r'C:\Users\BCENGIZ\Desktop\kamis_automation-burakCengizNewBranch\properties.yaml') as file:
+with open(r'C:\Users\Burak\Desktop\kamis_automation-master\properties.yaml') as file:
     properties_list = yaml.load(file, Loader=yaml.FullLoader)
-baseUrl = "https://www.antalyalinakliyat.com.tr/"
-baseUrl ="https://github.com/zkylab/kamis_automation"
+baseUrl ="http://isar.com.tr/"
 infra.recursive_link_collector(baseUrl)
 own_links = infra.recursively_data['own-links']
 images = infra.recursively_data['images']
@@ -34,5 +33,6 @@ print(tests.check_internet_time_out(all_links,2))
 print(tests.check_file_type(all_links))
 print(tests.check_breadcrumbs(own_links,properties_list.get('breadcrumb_class')))
 print(tests.check_link_new_tab(own_links))
+print(tests.check_title_brand_name(link_titles, properties_list.get('kurum_adi')))
 '''
-
+print(tests.check_title_Anasayfa(baseUrl))

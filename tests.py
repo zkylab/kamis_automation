@@ -411,3 +411,23 @@ def check_pages_for_logolink_to_mainpage(all_urls):
         print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilebiliyor")
     else:
         print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilemiyor")"""
+
+def check_title_brand_name(titles, kurumAdi):
+    starts_with_brand_name = []
+    for title in titles.values():
+        if title.startswith(kurumAdi):
+            starts_with_brand_name.append(title)
+    print(starts_with_brand_name)
+    return starts_with_brand_name
+
+def check_title_Anasayfa(url):
+    page = urlopen(url)
+    page_soup = BeautifulSoup(page, "lxml")
+    if page_soup.title.text.startswith('Ana Sayfa'):
+        print("Anasayfa başlığı yanlış başlıyor.")
+    else:
+        print('Ana Sayfa Başlığı doğru başlıyor.')
+    if(len(page_soup.title.text)>15):
+        print("Ana Sayfa başlığı uzun")
+    else:
+        print("Ana Sayfa başlığı uygun")
