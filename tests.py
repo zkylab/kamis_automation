@@ -146,9 +146,9 @@ def check_breadcrumbs_link(liste,bread_crumb_class_name):
     return last_breadcrumb_with_link,last_breadcrumb_without_link
 
 #Yeni Sekmede açılan - açılmayan linkler
-def check_link_new_tab(liste):
-    links_open_in_new_tab =["Yeni Sekmede Açılan Dosyalar :"]
-    links_not_open_in_new_tab =["text/html Olmamasına Rağmen Yeni Sekmede Açılmayan Dosyalar :"]
+def check_document_link_new_tab(liste):
+    document_links_open_in_new_tab =["Yeni Sekmede Açılan Dosyalar :"]
+    document_links_not_open_in_new_tab =["text/html Olmamasına Rağmen Yeni Sekmede Açılmayan Dosyalar :"]
     for link in liste:
         page = urlopen(link)
         page_soup = BeautifulSoup(page, "lxml")
@@ -160,10 +160,10 @@ def check_link_new_tab(liste):
                     if not content_type_of_tested.startswith("text/html"):
                         tag_test_for_new_tab = links.get('target')
                         if tag_test_for_new_tab == "_blank":
-                            links_open_in_new_tab.append(links.get('href'))
+                            document_links_open_in_new_tab.append(links.get('href'))
                         else:
-                            links_not_open_in_new_tab.append(links.get('href'))
-    return links_open_in_new_tab,links_not_open_in_new_tab
+                            document_links_not_open_in_new_tab.append(links.get('href'))
+    return document_links_open_in_new_tab,document_links_not_open_in_new_tab
 
 # TEST, check viewport
 def check_viewport(links):
@@ -431,3 +431,42 @@ def check_title_Anasayfa(url):
         print("Ana Sayfa başlığı uzun")
     else:
         print("Ana Sayfa başlığı uygun")
+
+#Yeni Sekmede açılan - açılmayan linkler
+def check_link_new_tab(liste):
+    links_open_in_new_tab =["Yeni Sekmede Açılan Bağlantılar :"]
+    links_not_open_in_new_tab =["Yeni sekmede Açılmayan Bağlantılar :"]
+    for link in liste:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        print(liste)
+        for links in page_soup.findAll('a'):
+            if links.get('href') is not None:
+                if links.get('href').startswith("http"):
+                    tag_test_for_new_tab = links.get('target')
+                    if tag_test_for_new_tab == "_blank":
+                        links_open_in_new_tab.append(links.get('href'))
+                        print("-")
+                    else:
+                        links_not_open_in_new_tab.append(links.get('href'))
+                        print("+")
+    return links_open_in_new_tab,links_not_open_in_new_tab
+
+#Dış bağlantıların yeni sekmede açılma durumu
+def check_link_new_window(liste,baseUrl):
+    links_open_in_new_window =["Yeni Pencerede Açılan Bağlantılar :"]
+    links_not_open_in_new_window =["Yeni Pencerede Açılmayan Bağlantılar :"]
+    for link in liste:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        print(liste)
+        for links in page_soup.findAll('a'):
+            if links.get('href') is not None:
+                if not links.get('href').startswith(baseUrl):
+                    if links.get('href').startswith("http"):
+                        tag_test_for_new_tab = links.get('target')
+                        if tag_test_for_new_tab == "popup":
+                            links_open_in_new_window.append(links.get('href'))
+                        else:
+                            links_not_open_in_new_window.append(links.get('href'))
+    return links_open_in_new_window,links_not_open_in_new_window
