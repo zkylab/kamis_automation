@@ -16,6 +16,7 @@
   </component>
   <component name="ProjectId" id="1VfUsrkaOlFvO34jsYcBzsyLAiW" />
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
   </component>
@@ -58,5 +59,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="655" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1582977472614">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="655" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1582977472614" />
   </component>
 </project>
