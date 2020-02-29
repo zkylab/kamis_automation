@@ -1,17 +1,19 @@
 import infra
 import tests
 import yaml
-with open(r'C:\Users\Burak\Desktop\kamis_automation-master\properties.yaml') as file:
+with open(r'C:\Users\bcengiz\PycharmProjects\Git\kamis_automation-burakCengizNewBranch\properties.yaml') as file:
     properties_list = yaml.load(file, Loader=yaml.FullLoader)
-baseUrl ="http://isar.com.tr/"
+baseUrl ="https://havelsan.com.tr/"
 infra.recursive_link_collector(baseUrl)
 own_links = infra.recursively_data['own-links']
 '''
 images = infra.recursively_data['images']
 link_titles = infra.recursively_data['link-title']
 all_links = infra.recursively_data['all-links']
+
 link_texts = infra.recursively_data['link-texts']
 '''
+
 # TESTS. Will not be printed, reported...
 '''
 print(tests.check_image_size(images, properties_list.get('image_size_max')))
@@ -37,6 +39,10 @@ print(tests.check_document_link_new_tab(own_links))
 print(tests.check_title_brand_name(link_titles, properties_list.get('kurum_adi')))
 print(tests.check_link_new_tab(own_links))
 print(tests.check_title_Anasayfa(baseUrl))
-'''
-
 print(tests.check_link_new_window(own_links,baseUrl))
+print(tests.check_breadcrumbs(own_links,properties_list.get('breadcrumb_class')))
+print(tests.check_links_lower_upper_case(link_texts))
+'''
+print(tests.check_languageOptions(own_links,properties_list.get('languageOptions_class')))
+
+

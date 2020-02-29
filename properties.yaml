@@ -1,7 +1,8 @@
-breadcrumb_class : breadcrumb
+breadcrumb_class : tepe-nav
 image_size_max : 12
 link_size_max : 5
 title_size_max : 5
 response_time_max : 2
 max_length : 6
 kurum_adi : "B"
+languageOptions_class : "item language"

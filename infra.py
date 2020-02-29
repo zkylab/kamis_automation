@@ -5,7 +5,7 @@ import re
 recursively_data = {"link-title": {}, "all-links": [], "images": [], "own-links": [], "link-texts": {}}
 # this line should be taken from config (yaml etc.)
 
-baseUrl ="http://isar.com.tr/"
+baseUrl ="https://havelsan.com.tr/"
 # regex pattern for tel, mailto etc which are not actually links
 mail_tel_regex = r"tel\:\d{1,}"
 pattern = re.compile(mail_tel_regex)

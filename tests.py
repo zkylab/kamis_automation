@@ -411,7 +411,8 @@ def check_pages_for_logolink_to_mainpage(all_urls):
         print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilebiliyor")
     else:
         print("Ana sayfaya, her sayfada bulunan kurum logosu tıklanarak gidilemiyor")"""
-
+#Kurum adı başlığın önüne alınmamalıdır. Pencere araç çubuğuna küçültüldüğünde ya da sekme olarak görüntülendiğinde bu
+#başlığın ilk kısımları görüntüleneceği için ayırt edici nitelikte metin kullanılması uygundur.
 def check_title_brand_name(titles, kurumAdi):
     starts_with_brand_name = []
     for title in titles.values():
@@ -470,3 +471,36 @@ def check_link_new_window(liste,baseUrl):
                         else:
                             links_not_open_in_new_window.append(links.get('href'))
     return links_open_in_new_window,links_not_open_in_new_window
+
+# Tamamı büyük veya tamamı küçük harflerden oluşan bağlantı metinleri, okumayı ve kullanıcıların internet sitesini taramasını
+# zorlaştıracağı için tercih edilmemelidir.
+def split(word):
+    return [char for char in word]
+def check_links_lower_upper_case(link_texts):
+    allLower_allUpper_links = []
+    charArrayOfLinkText =[]
+    count_upper = 0
+    count_lower = 0
+    for link_text in link_texts.values():
+        charArrayOfLinkText=split(link_text)
+        for char in charArrayOfLinkText:
+            if ord(char) > 96:
+                count_upper = count_upper+1
+            if ord(char)<91:
+                count_lower = count_lower+1
+        if count_upper  == 0 or count_lower == 0:
+            allLower_allUpper_links.append(link_text)
+    return allLower_allUpper_links
+#Yabancı dil seçeneklerine ana sayfada ve tüm alt sayfalarda yer verilmelidir.
+def check_languageOptions(liste, language_options_classname):
+    page_with_lan_op =["Dil seçeneği olan sayfalar : "]
+    page_without_lan_op =["Dil seçeneği olmayan sayfalar : "]
+    for link in liste:
+        page = urlopen(link)
+        page_soup = BeautifulSoup(page, "lxml")
+        lan_op_element = page_soup.find("", {"class": language_options_classname})
+        if lan_op_element is not None:
+            page_with_lan_op.append(page_soup.title)
+        else:
+            page_without_lan_op.append(page_soup.title)
+    return page_without_lan_op,page_with_lan_op
