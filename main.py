@@ -1,7 +1,7 @@
 import infra
 import tests
 import yaml
-with open(r'C:\Users\bcengiz\PycharmProjects\Git\kamis_automation-burakCengizNewBranch\properties.yaml') as file:
+with open(r'C:\Users\Burak\Desktop\kamis_automation-master\properties.yaml') as file:
     properties_list = yaml.load(file, Loader=yaml.FullLoader)
 baseUrl ="https://havelsan.com.tr/"
 infra.recursive_link_collector(baseUrl)
